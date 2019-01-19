@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+ 
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ChatRoom</title>
+    <link href="CSS/Index.css" rel="stylesheet" type="text/css"></link>
+    
+</head>
+ 
+<body>
+    <div id="header">
+        <input type="text" id="name" placeholder="输入用户名">
+        <button id="setname" >设置</button><br/>
+        <input type="text" id="text" placeholder="输入发送内容">
+        <button id="btn">发送</button>
+    </div>
+    <div id="body">
+        <div id="container"></div>
+        <div id="chatterlist">
+            <p class="chatterlist-head">在线用户(0)</p>
+        </div>
+    </div>
+    <script>
+        var ws = null;
+ 
+        document.getElementById('setname').onclick = function () {
+            var name = document.getElementById('name').value;
+            if (name === '') {
+                name = "DefaultN";
+            }
+ 
+            ws = new WebSocket('ws://127.0.0.1:4399');
+ 
+            ws.onopen = function () {
+                ws.send(JSON.stringify({
+                    name: name,
+                    type: 'setname'
+                }));
+            }
+ 
+            document.getElementById('btn').onclick = send;
+            document.getElementById('text').onkeyup = function(e) {
+                if (e.keyCode !== 13) return;
+                send();
+            }
+ 
+            ws.onmessage = function (e) {
+                var data = JSON.parse(e.data);
+ 
+                if(data.type === 'chatterList') {
+                    var list = JSON.parse(data.list);
+ 
+                    var oldList = document.getElementById('chatterlist');
+                    oldList.innerHTML = '';
+ 
+                    var p_list_head = document.createElement('p');
+                    p_list_head.setAttribute('class', 'chatterlist-head');
+                    p_list_head.innerHTML = "在线用户(" + list.length + ")";
+                    oldList.appendChild(p_list_head);
+ 
+                    for(var i = 0; i < list.length; i++) {
+                        var p_user = document.createElement('p');
+                        p_user.innerHTML = list[i].name;
+                        p_user.setAttribute('class', 'userlist-item');
+                        oldList.appendChild(p_user);
+                    }
+                } else {
+                    console.log(data);
+                    var oldContent = document.getElementById('container');
+                    oldContent.insertBefore(createChatDiv(data), oldContent.children[0]);
+                }
+            }
+ 
+            var p_name = document.getElementById('name');
+            var p_setname = document.getElementById('setname');
+            p_name.innerHTML = name;
+            p_setname.setAttribute('disabled', true);
+            p_name.setAttribute('disabled', true);
+            p_setname.style.display = "none";
+            p_name.style.border = "none";
+        }
+ 
+        function createChatDiv(data) {
+            var div = document.createElement('div');
+            var p_time = document.createElement('p');
+            var p_content = document.createElement('p');
+ 
+            switch (data.type) {
+                case 'serverInformation':
+                    p_time.innerHTML = new Date().Format("yyyy-MM-dd hh:mm:ss");  
+                    p_content.innerHTML = data.message;
+                    break;
+                
+                case 'chat':
+                    p_time.innerHTML = new Date().Format("yyyy-MM-dd hh:mm:ss");  
+                    p_content.innerHTML = data.name + ': ' + data.message;
+                    break;
+ 
+                default:
+                    break;
+            }
+            
+            p_time.setAttribute('class', 'time');
+            p_content.setAttribute('class', 'content');
+ 
+            div.appendChild(p_time);
+            div.appendChild(p_content);
+            return div;
+        }
+ 
+        Date.prototype.Format = function (fmt) { //author: meizz 
+            var o = {
+                "M+": this.getMonth() + 1, //月份 
+                "d+": this.getDate(), //日 
+                "h+": this.getHours(), //小时 
+                "m+": this.getMinutes(), //分 
+                "s+": this.getSeconds(), //秒 
+                "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
+                "S": this.getMilliseconds() //毫秒 
+            };
+            if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+            for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+            return fmt;
+        }
+ 
+        function send() {
+            if(document.getElementById('text').value === '') return;
+            ws.send(JSON.stringify({
+                message: document.getElementById('text').value,
+                type: 'chat'
+            }));
+            document.getElementById('text').value = '';
+        }
+ 
+    </script>
+</body>
+</html>

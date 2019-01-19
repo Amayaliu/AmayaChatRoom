@@ -1,0 +1,170 @@
+body{
+    height: 100%;
+    clear: both;
+    margin: 0;
+}
+ 
+#header{
+    background-color: white;
+    position: fixed;
+    padding: 10px;
+    width: 100%;
+    border-bottom: 1px solid #ddd;
+}
+ 
+#body{
+    padding-top: 9.5vh;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
+ 
+#container{
+    min-width: 500px;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 80% - 20px;
+    height: 100%;
+    float: left;
+}
+ 
+#chatterlist{
+    position: fixed;
+    right: 0;
+    top: 51;
+    width: 20%;
+    background-color: #f6f6f6;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    text-align: center;
+}
+ 
+.chatterlist-head{
+    margin: 0;
+    padding: 5px 0 5px 10px;
+    width: 100% - 10px;
+    color: white;
+    background-color: #00a1b6;
+}
+ 
+.userlist-item{
+    margin: 0;
+    text-align: center;
+    padding: 4px 0 ;
+    font-size: 14px;
+    border-bottom: 1px solid #ddd;
+}
+ 
+.time{
+    width: fit-content;
+    padding: 2px 8px 2px 8px;
+    font-size: 8px;
+    color: gray;
+    background-color: #f6f6f6;
+    border-radius: 8px;
+    margin: 0;
+    margin-top: 10px;
+}
+ 
+.content{
+    width: fit-content;
+    padding: 2px 8px 2px 8px;
+    font-size: 14px;
+    color: #f6f6f6;
+    background-color: #00a1b6;
+    border-radius: 8px;
+    max-width: 70%;
+    margin: 0;
+    margin-top:5px;
+}
+ 
+#btn, #setname{
+    height: 30px;
+    font-size: 14px;
+    border-radius: 10px;
+    border: 1px solid #00a1b6;
+    color: white;
+    padding: 2px 10px 2px 10px;
+    background-color: #00a1b6;
+    border: none;
+    outline: none;
+    cursor: pointer;
+}
+ 
+#btn:hover{
+    color: #00a1b6;
+    background-color: white;
+    border: 1px solid #00a1b6;
+    transition: 0.4s;
+}
+ 
+#setname:hover{
+    color: #00a1b6;
+    background-color: white;
+    border: 1px solid #00a1b6;
+    transition: 0.4s;
+}
+ 
+#name, #text{
+    height: 25px;
+    width: 100px;
+    font-size: 14px;
+    border-radius: 3px;
+    border: 1px solid #9fafb1;
+    box-shadow: #ddd;
+    padding-left: 10px;
+    outline: none;
+}
+ 
+#text{
+    width: 400px;
+}
+ 
+#name:focus{
+    border: 1px solid #00a1b6;
+    transition: 1s;
+}
+ 
+#text:focus{
+    border: 1px solid #00a1b6;
+    transition: 1s;
+}
+
+@media screen and (max-width: 420px) {
+    #name, #text{ 
+        width: 20vw;
+        height: 3vh;
+        font-size: 12px;
+        margin: 5px 0 0 0;
+    }
+    #text{
+        width: 75vw;
+    }
+    #body{
+        padding-top:12.5vh; 
+        font-size: 12px;
+    }
+    #btn, #setname{
+        height: 3.5vh;
+        line-height: 3vh;
+        width: 15vw;
+        border-radius: 3px;
+        font-size: 12px;
+    }
+    .time{
+        border-radius: 2px;
+    }
+    .content{
+        border-radius: 2px;
+        max-width: 70vw;
+    }
+    #chatterlist{
+        width: 18vw;
+        text-align: center;
+    }
+    .chatterlist-head{
+        padding: 5px;
+        text-align: center;
+    }
+}

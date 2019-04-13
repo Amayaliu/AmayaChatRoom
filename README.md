@@ -1,37 +1,19 @@
 # AmayaChatRoom
 
-#### 介绍
-node构建基本聊天平台。
+地址：socket.amayaliu.cn 小白学习中，大佬勿喷
 
-#### 软件架构
-软件架构说明
+项目克隆后，cmd打开到文件地址，使用node打开app.js文件 node app.js
 
+运行后，即可打开index.html文件浏览，亦可打开127.0.0.1:4399端口访问，对话可选择多打开几个
 
-#### 安装教程
+服务器部署： 首先把app.js 文件部署到服务器，服务器需安装node
 
-1. xxxx
-2. xxxx
-3. xxxx
+安装pm2并启动nodejs的项目
 
-#### 使用说明
+1.全局安装 npm install -g pm2
 
-1. xxxx
-2. xxxx
-3. xxxx
+2.进入到移入服务器的文件夹 pm2 start app.js
 
-#### 参与贡献
+3.检查app.js 文件是否启动可用 pm2 list
 
-1. Fork 本仓库
-2. 新建 Feat_xxx 分支
-3. 提交代码
-4. 新建 Pull Request
-
-
-#### 码云特技
-
-1. 使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2. 码云官方博客 [blog.gitee.com](https://blog.gitee.com)
-3. 你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解码云上的优秀开源项目
-4. [GVP](https://gitee.com/gvp) 全称是码云最有价值开源项目，是码云综合评定出的优秀开源项目
-5. 码云官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6. 码云封面人物是一档用来展示码云会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+4.服务器记得打开对应的外网访问端口

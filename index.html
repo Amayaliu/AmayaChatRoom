@@ -3,17 +3,37 @@
  
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>AmayaChatRoom</title>
-    <link href="CSS/Index.css" rel="stylesheet" type="text/css"/>
-    
+    <title>在线聊天室 - Amaya丶夜雨博客 - Amayaliu</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+    <meta name="Author" content="Amaya丶夜雨" /><!--作者-->
+    <meta name="Keywords" content="在线聊天室,Node,nodejs-websocket,Amaya夜雨,Amayaliu,刘自杰" /><!--关键词-->
+    <meta name="Description" content="Node搭建的在线聊天室。Amaya丶夜雨。" /><!--描述-->
+    <meta property="og:title" content="·♪小楼一夜听丶风雨♪ ♩ ♫ - Amaya丶夜雨博客 - 刘自杰">
+    <meta property="og:url" content="https://Amayaliu.cn">
+    <meta property="og:site_name" content="Amaya丶夜雨">
+    <meta property="og:description" content="Amaya丶夜雨博客,Amayaliu,一个深圳前端菜鸟的日常,www.amayaliu.cn,刘自杰">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="·♪小楼一夜听丶风雨♪ ♩ ♫ - Amaya丶夜雨博客 - 刘自杰">
+    <meta name="twitter:description" content="Amaya丶夜雨博客,Amayaliu,一个深圳前端菜鸟的日常,www.amayaliu.cn,刘自杰">
+    <link rel="apple-touch-icon-precomposed" href="https://amayaliu.cn/images/preview1080_180X180.png" />
+
+    <link href="CSS/Index.css" rel="stylesheet" type="text/css" />
 </head>
  
 <body>
+    <div id="background" class="wall"></div>
+    <div id="midground" class="wall"></div>
+    <div id="foreground" class="wall"></div>
+    <div id="top" class="wall"></div>
+
+    <div id="Amaya">
+        <div class="Register">
+            <input type="text" id="name" placeholder="输入自己心仪的聊天名称"><br />
+            <button id="setname" class="RegisterSubmit">设 置</button><br />
+        </div>
+    </div>
     <div id="header">
-        <input type="text" id="name" placeholder="输入用户名">
-        <button id="setname" >设置</button><br/>
         <input type="text" id="text" placeholder="输入发送内容">
         <button id="btn">发送</button>
     </div>
@@ -23,45 +43,53 @@
             <p class="chatterlist-head">在线用户(0)</p>
         </div>
     </div>
+
     <script>
         var ws = null;
- 
+
         document.getElementById('setname').onclick = function () {
             var name = document.getElementById('name').value;
             if (name === '') {
                 name = "DefaultN";
             }
- 
+			
+			//var hostname = '' || location.hostname;
+		    //var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
+		    //ws = new WebSocket(protocol + '://' + hostname + ':' + '4399' + '/');
+
             ws = new WebSocket('ws://127.0.0.1:4399');
- 
+			
+			//测试，官方链接
+			//ws = new WebSocket('wss://echo.websocket.org');
+
             ws.onopen = function () {
                 ws.send(JSON.stringify({
                     name: name,
                     type: 'setname'
                 }));
             }
- 
+
             document.getElementById('btn').onclick = send;
-            document.getElementById('text').onkeyup = function(e) {
+            document.getElementById('text').onkeyup = function (e) {
                 if (e.keyCode !== 13) return;
                 send();
             }
- 
+
             ws.onmessage = function (e) {
                 var data = JSON.parse(e.data);
- 
-                if(data.type === 'chatterList') {
+
+                if (data.type === 'chatterList') {
                     var list = JSON.parse(data.list);
- 
+
                     var oldList = document.getElementById('chatterlist');
                     oldList.innerHTML = '';
- 
+
                     var p_list_head = document.createElement('p');
                     p_list_head.setAttribute('class', 'chatterlist-head');
                     p_list_head.innerHTML = "在线用户(" + list.length + ")";
                     oldList.appendChild(p_list_head);
- 
-                    for(var i = 0; i < list.length; i++) {
+
+                    for (var i = 0; i < list.length; i++) {
                         var p_user = document.createElement('p');
                         p_user.innerHTML = list[i].name;
                         p_user.setAttribute('class', 'userlist-item');
@@ -73,7 +101,7 @@
                     oldContent.insertBefore(createChatDiv(data), oldContent.children[0]);
                 }
             }
- 
+
             var p_name = document.getElementById('name');
             var p_setname = document.getElementById('setname');
             p_name.innerHTML = name;
@@ -81,61 +109,74 @@
             p_name.setAttribute('disabled', true);
             p_setname.style.display = "none";
             p_name.style.border = "none";
+
+            //显示模块
+            document.getElementById("Amaya").style.display = "none";
+            document.getElementById("header").style.display = "block";
+            document.getElementById("body").style.display = "block";
+
+            //取消背景
+            document.getElementById("background").style.display = "none";
+            document.getElementById("midground").style.display = "none";
+            document.getElementById("foreground").style.display = "none";
+            document.getElementById("top").style.display = "none";
+
         }
- 
+
         function createChatDiv(data) {
             var div = document.createElement('div');
             var p_time = document.createElement('p');
             var p_content = document.createElement('p');
- 
+
             switch (data.type) {
                 case 'serverInformation':
-                    p_time.innerHTML = new Date().Format("yyyy-MM-dd hh:mm:ss");  
+                    p_time.innerHTML = new Date().Format("yyyy-MM-dd hh:mm:ss");
                     p_content.innerHTML = data.message;
                     break;
-                
+
                 case 'chat':
-                    p_time.innerHTML = new Date().Format("yyyy-MM-dd hh:mm:ss");  
-                    p_content.innerHTML = data.name + ': ' + data.message;
+                    p_time.innerHTML = new Date().Format("yyyy-MM-dd hh:mm:ss");
+                    p_content.innerHTML = data.name + '&nbsp;:<span class="FontColor"> ' + data.message + '</span>';
                     break;
- 
+
                 default:
                     break;
             }
-            
+
             p_time.setAttribute('class', 'time');
             p_content.setAttribute('class', 'content');
- 
+
             div.appendChild(p_time);
             div.appendChild(p_content);
             return div;
         }
- 
-        Date.prototype.Format = function (fmt) { //author: meizz 
+
+        Date.prototype.Format = function (fmt) { //author: meizz
             var o = {
-                "M+": this.getMonth() + 1, //月份 
-                "d+": this.getDate(), //日 
-                "h+": this.getHours(), //小时 
-                "m+": this.getMinutes(), //分 
-                "s+": this.getSeconds(), //秒 
-                "q+": Math.floor((this.getMonth() + 3) / 3), //季度 
-                "S": this.getMilliseconds() //毫秒 
+                "M+": this.getMonth() + 1, //月份
+                "d+": this.getDate(), //日
+                "h+": this.getHours(), //小时
+                "m+": this.getMinutes(), //分
+                "s+": this.getSeconds(), //秒
+                "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+                "S": this.getMilliseconds() //毫秒
             };
             if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
             for (var k in o)
-            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+                if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
             return fmt;
         }
- 
+
         function send() {
-            if(document.getElementById('text').value === '') return;
+            if (document.getElementById('text').value === '') return;
             ws.send(JSON.stringify({
                 message: document.getElementById('text').value,
                 type: 'chat'
             }));
             document.getElementById('text').value = '';
         }
- 
+
     </script>
+    <script src="https://amayaliu.cn/PersonalHabits/BaiduPush.js"></script>
 </body>
 </html>

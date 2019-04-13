@@ -6,9 +6,10 @@
  */
 
 var ws = require('nodejs-websocket');
- 
+
 var server = ws.createServer(function(conn) {
- 
+	
+	//连接
     conn.on('text', function(str) {
  
         var data = JSON.parse(str);
@@ -41,7 +42,8 @@ var server = ws.createServer(function(conn) {
                 break;
         }
     });
- 
+	
+	//离开
     conn.on('close', function() {
         boardcast(JSON.stringify({
             type: 'serverInformation',
@@ -53,12 +55,14 @@ var server = ws.createServer(function(conn) {
             list: getAllChatter()
         }))
     });
- 
+	
+	//异常
     conn.on('error', function(err) {
         console.log(err);
     });
 }).listen(4399);
- 
+
+//广播
 function boardcast(str) {
     server.connections.forEach(function(conn) {
         conn.sendText(str);

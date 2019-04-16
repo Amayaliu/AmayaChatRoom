@@ -18,6 +18,4 @@
 
 4.服务器记得打开对应的外网访问端口
 
-<video max-width="602px"  controls="controls"> 
-<source src="img.amayaliu.cn/socketYs.mp4" type="video/mp4"></source> 
-</video>
+

@@ -18,4 +18,6 @@
 
 4.服务器记得打开对应的外网访问端口
 
-
+<p align='center'>
+<img src='http://img.amayaliu.cn/socketYs.jpg' title='images' style='max-width:600px'></img>
+</p>
